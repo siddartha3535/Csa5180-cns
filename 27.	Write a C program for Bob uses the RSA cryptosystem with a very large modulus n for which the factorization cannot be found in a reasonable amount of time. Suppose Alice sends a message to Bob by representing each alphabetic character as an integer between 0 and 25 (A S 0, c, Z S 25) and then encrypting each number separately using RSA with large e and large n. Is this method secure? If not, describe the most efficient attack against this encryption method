@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <math.h>
+
+// Function to calculate (base^exponent) % modulus
+unsigned long long mod_pow(unsigned long long base, unsigned long long exponent, unsigned long long modulus) {
+    unsigned long long result = 1;
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
+            result = (result * base) % modulus;
+        }
+        base = (base * base) % modulus;
+        exponent /= 2;
+    }
+    return result;
+}
+
+int main() {
+    unsigned long long n = 3233; // Modulus
+    unsigned long long e = 17;   // Public exponent
+    unsigned long long encrypted_message[100]; // Encrypted message
+
+    // Suppose Alice's message is "HELLO"
+    char message[] = "HELLO";
+
+    printf("Original Message: %s\n", message);
+
+    // Encrypt each character separately using RSA
+    for (int i = 0; message[i] != '\0'; ++i) {
+        // Convert character to its corresponding number (A=0, B=1, ..., Z=25)
+        int num = message[i] - 'A';
+        
+        // Encrypt using RSA: c = m^e mod n
+        encrypted_message[i] = mod_pow(num, e, n);
+    }
+
+    printf("Encrypted Message: ");
+    for (int i = 0; message[i] != '\0'; ++i) {
+        printf("%llu ", encrypted_message[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
