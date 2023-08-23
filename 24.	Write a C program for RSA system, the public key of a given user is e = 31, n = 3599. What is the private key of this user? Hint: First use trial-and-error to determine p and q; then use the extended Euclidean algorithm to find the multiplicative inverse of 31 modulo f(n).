@@ -1,0 +1,53 @@
+#include <stdio.h>
+
+// Function to calculate the greatest common divisor (GCD)
+int gcd(int a, int b) {
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+
+// Function to calculate the modular multiplicative inverse using the extended Euclidean algorithm
+int mod_inverse(int e, int phi) {
+    int d = 0, x1 = 0, x2 = 1, y1 = 1, y2 = 0;
+    int q, r, x, y;
+
+    while (phi > 0) {
+        q = e / phi;
+        r = e - q * phi;
+        x = x2 - q * x1;
+        y = y2 - q * y1;
+        e = phi;
+        phi = r;
+        x2 = x1;
+        x1 = x;
+        y2 = y1;
+        y1 = y;
+    }
+
+    d = x2;
+    return d;
+}
+
+int main() {
+    int e = 31;   // Public exponent
+    int n = 3599; // Modulus
+    int p, q, phi, d;
+
+    // Trial-and-error to find prime factors p and q
+    for (p = 2; p <= n; p++) {
+        if (n % p == 0) {
+            q = n / p;
+            break;
+        }
+    }
+
+    phi = (p - 1) * (q - 1);
+
+    // Calculate the private exponent d using the extended Euclidean algorithm
+    d = mod_inverse(e, phi);
+
+    printf("Private Key (d): %d\n", d);
+
+    return 0;
+}
