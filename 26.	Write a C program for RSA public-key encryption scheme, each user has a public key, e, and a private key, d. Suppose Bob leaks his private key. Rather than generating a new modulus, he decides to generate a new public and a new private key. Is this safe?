@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <math.h>
+
+// Function to calculate (base^exponent) % modulus
+unsigned long long mod_pow(unsigned long long base, unsigned long long exponent, unsigned long long modulus) {
+    unsigned long long result = 1;
+    while (exponent > 0) {
+        if (exponent % 2 == 1) {
+            result = (result * base) % modulus;
+        }
+        base = (base * base) % modulus;
+        exponent /= 2;
+    }
+    return result;
+}
+
+int main() {
+    unsigned long long n = 187; // Modulus
+    unsigned long long e = 7;   // Public exponent
+    unsigned long long d = 23;  // Private exponent
+
+    // Encryption
+    unsigned long long plaintext = 88; // Message to encrypt
+    unsigned long long ciphertext = mod_pow(plaintext, e, n);
+    printf("Ciphertext: %llu\n", ciphertext);
+
+    // Decryption
+    unsigned long long decrypted_text = mod_pow(ciphertext, d, n);
+    printf("Decrypted Message: %llu\n", decrypted_text);
+
+    return 0;
+}
